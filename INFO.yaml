@@ -1,0 +1,44 @@
+---
+project: 'it_tifg'
+project_creation_date: '2025-05-15'
+project_category: ''
+lifecycle_state: 'Incubation'
+project_lead: &it-tifg_ptl
+    name: 'Bimo Fransiscus Asisi'
+    email: 'd11002806@gapps.ntust.edu.tw'
+    id: 'frbimo2'
+    company: 'National Taiwan University of Science and Technology'
+    timezone: 'Asia/Taipei'
+primary_contact: *it-tifg_ptl
+issue_tracking:
+    type: 'jira'
+    url: 'https://jira.o-ran-sc.org/projects/INT'
+    key: 'INT'
+mailing_list:
+    type: 'groups.io'
+    url: 'https://lists.o-ran-sc.org/g/main'
+    tag: '<[it/tifg]>'
+realtime_discussion:
+    type: 'irc'
+    server: 'freenode.net'
+    channel: '#o-ran-sc'
+meetings:
+    - type: 'zoom'
+      agenda: ''
+      url: ''
+      server: 'n/a'
+      channel: 'n/a'
+      repeats: 'weekly'
+      time: ''
+repositories:
+    - 'it/tifg'
+committers:
+    - <<: *it-tifg_ptl
+    - name: 'Alex Stancu'
+      email: 'alexandru.stancu@highstreet-technologies.com'
+      id: 'alex.stancu'
+      company: 'highstreet technologies GmbH'
+      timezone: 'Europe/Bucharest'
+tsc:
+    # yamllint disable rule:line-length
+    approval: 'https://lf-o-ran-sc.atlassian.net/wiki/spaces/TOC/overview#O-RANSCTechnicalOversightCommittee(TOC)-20250424'
