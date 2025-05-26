@@ -1,0 +1,6 @@
+Verified-1: ORAN Required GHA <releng+oran.required.gha@linuxfoundation.org>
+Submitted-by: Matthew Watkins <mwatkins@linuxfoundation.org>
+Submitted-at: Mon, 26 May 2025 10:37:41 +0000
+Reviewed-on: https://gerrit.o-ran-sc.org/r/c/it/tifg/+/14454
+Project: it/tifg
+Branch: refs/heads/master
