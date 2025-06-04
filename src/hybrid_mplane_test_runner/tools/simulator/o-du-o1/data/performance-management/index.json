@@ -1,0 +1,40 @@
+{
+    "config": {
+        "log-period": 60,
+        "repetition-period": 240,
+
+        "points": [
+            "RRC.ConnMean",
+            "RRC.ConnMean.226F04",
+            "RRC.ConnMax",
+            "RRC.ConnMax.226F04"
+        ]
+    },
+
+    "values": [
+        {
+            "RRC.ConnMean": 22,
+            "RRC.ConnMean.226F04": 3,
+            "RRC.ConnMax": 17,
+            "RRC.ConnMax.226F04": 5
+        },
+        {
+            "RRC.ConnMean": 27,
+            "RRC.ConnMean.226F04": 4,
+            "RRC.ConnMax": 19,
+            "RRC.ConnMax.226F04": 7
+        },
+        {
+            "RRC.ConnMean": 30,
+            "RRC.ConnMean.226F04": 9,
+            "RRC.ConnMax": 19,
+            "RRC.ConnMax.226F04": 3
+        },
+        {
+          "RRC.ConnMean": 5,
+          "RRC.ConnMean.226F04": 4,
+          "RRC.ConnMax": 3,
+          "RRC.ConnMax.226F04": 3
+        }
+    ]
+}

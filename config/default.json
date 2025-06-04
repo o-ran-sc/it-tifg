@@ -1,0 +1,45 @@
+{
+  "paths": {
+    "metadata_dir": "metadata",
+    "output_dir": "output",
+    "testbed_file": "testbed.json",
+    "testlab_file": "testlab.json",
+    "specs_file": "specs.json",
+    "results_file": "results.json"
+  },
+  "test_metadata": {
+    "dut_name": "PyNTS O-RU",
+    "contact_first_name": "Alice",
+    "contact_last_name": "Tester",
+    "contact_email": "alice@example.org",
+    "contact_organization": "ExampleOrg",
+    "contact_phone": "+123456789"
+  },
+  "test_cases": {
+    "tc_001_expected_name": "pynts-o-ru-hybrid",
+    "tc_001_expected_status": "connected",
+    "tc_001_expected_capability": "o-ran-uplane-conf",
+    "tc_002_mountpoint_name": "pynts-o-ru-hybrid",
+    "tc_002_filter_path": "ietf-hardware:hardware",
+    "tc_002_config_path": "ietf-hardware:hardware",
+    "tc_003_mountpoint_name": "pynts-o-ru-hybrid"
+  },
+  "controller": {
+    "odl_url": "https://odlux.oam.smo.o-ran-sc.org",
+    "odl_username": "admin",
+    "odl_password": "Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U",
+    "timeout": 10
+  },
+  "simulator": {
+    "use_simulator": false,
+    "simulator_image": "pynts-oru:latest",
+    "simulator_port": 830
+  },
+  "log_level": "INFO",
+  "test_execution": {
+    "comment": "Uncomment one of the following options to control which tests are executed",
+    "test_cases": ["002", "003"],
+    "_categories": ["basic", "connectivity"],
+    "_suites": ["Default"]
+  }
+}

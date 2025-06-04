@@ -1,0 +1,759 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://o-ran.org/schemas/o-ran-test-results",
+    "title": "Test Results Summary",
+    "description": "JSON schema for test results relating to O-RAN. Copyright 2025 O-RAN ALLIANCE e.V. Licensed under the Standards Collaboration, Copyright License Version 1.0 (the 'License'); You may not use this file except in compliance with the License. You may obtain a copy of the License at https://www.o-ran.org/sccl",
+    "type": "object",
+    "$defs": {
+        "contacts": {
+            "description": "Contact information for person / party involved in the testing or an aspect of the testing.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "firstName": {
+                        "description": "Contact's first name.",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "lastName": {
+                        "description": "Contact's last name.",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "organization":{
+                        "description": "Organization or company the contact is associated with.",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "email": {
+                        "description": "Contact's email address",
+                        "type": "string",
+                        "maxLength": 255,
+                        "format": "email"
+                    },
+                    "phone": {
+                        "description": "Contact's phone number.",
+                        "type": "string",
+                        "maxLength": 255
+                    }
+                },
+                "required": ["firstName", "lastName", "email"],
+                "additionalProperties": false
+            },
+            "contains": {
+                "type": "object"
+            },
+            "minContains": 1
+        },
+        "units": {
+            "description": "Units of the value(s).",
+            "enum": [
+                "boolean",
+                "bps",
+                "kbps",
+                "Mbps",
+                "Gbps",
+                "dB",
+                "dBm",
+                "count",
+                "millisecond",
+                "second",
+                "bps/Hz",
+                "percentage",
+                "text"
+            ]
+        },
+        "resultType": {
+            "description": "A result. PASS/FAIL/etc. indicates the outcome of a test case, test metric, or test result.",
+            "enum": [
+                "PASS",
+                "FAIL",
+                "WARN",
+                "SKIP"
+            ]
+        },
+        "testStatus": {
+            "description": "Status of the test case or test metric",
+            "enum": [
+                "mandatory",
+                "conditionally.mandatory",
+                "optional"
+            ]
+        },
+        "decoratedLinks": {
+            "description": "A list of links to objects that have a display name, URL, and optionally a description.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "displayName": {
+                        "description": "Text that is displayed as the link when rendered.",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "description": {
+                        "description": "Longer, more descriptive text about the link and its contents.",
+                        "type": "string",
+                        "maxLength": 1023
+                    },
+                    "url": {
+                        "description": "URL Path for the reference.",
+                        "type": "string",
+                        "format": "uri"
+                    }
+                },
+                "required": [ "displayName", "url" ],
+                "additionalProperties": false
+            },
+            "contains": {
+                "type": "object"
+            },
+            "minContains": 1
+        }, 
+        "testType":{
+            "description": "Type of test results contained in the artifact container, with respect to the O-RAN Certification and Badging Programs.",
+            "enum": [
+                "conformance",
+                "interoperability",
+                "end-to-end",
+                "Other"
+            ]
+        },
+        "interfaceUnderTest": {
+            "description": "Enum for the interface that was under test.",
+            "enum": [
+                "o-ru.ofh",
+                "o-ru.fhm",
+                "o-du.ofh",
+                "o-du.fhm",
+                "o-du.e2",
+                "o-du.f1-c",
+                "o-du.f1-u",
+                "o-du.o1",
+                "o-cu.f1-c",
+                "o-cu.f1-u",
+                "o-cu.e2",
+                "o-cu.e1",
+                "o-cu.o1",
+                "smo.fhm",
+                "smo.o2",
+                "smo.o1",
+                "non-rt-ric.a1",
+                "near-rt-ric.a1",
+                "near-rt-ric.e2",
+                "near-rt-ric.o1"
+            ]
+        },
+        "artifacts": {
+            "description": "Paths, relative to the root of the archive, to files relating to the test.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "Short name or reference for the file and its contents.",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "path": {
+                        "description": "Path, relative to the root of the results archieve, to the file or object.",
+                        "type": "string",
+                        "maxLength": 1023
+                    },
+                    "description": {
+                        "description": "Detailed description of the file and its contents.",
+                        "type": "string",
+                        "maxLength": 4095
+                    }
+                },
+                "required": [ "name", "path", "description" ],
+                "additionalProperties": false
+            },
+            "contains": {
+                "type": "object"
+            },
+            "minContains": 1
+        },
+        "testGroup": {
+            "description": "Groups of test cases or test groups.",
+            "type": "object",
+            "properties": {
+                "number": {
+                    "description": "Test case number, in the format of x[.y].z.",
+                    "type": "string",
+                    "maxLength": 32,
+                    "pattern": "^([0-9]+)([.][0-9]+)*$"
+                },
+                "name": {
+                    "description": "Name of the test group.",
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "description": {
+                    "description": "Description of the test group.",
+                    "type": "string",
+                    "maxLength": 4095
+                },
+                "groupItems": {
+                    "type": "array",
+                    "items": {
+                        "oneOf": [
+                            {"$ref": "#/$defs/testCase"},
+                            {"$ref": "#/$defs/testGroup"}
+                        ]
+                    },
+                    "minItems": 1
+                }
+            },
+            "required": [ "number", "name", "groupItems" ],
+            "additionalProperties": false
+        },
+        "testCase": {
+            "type": "object",
+            "properties": {
+                "number": {
+                    "description": "Test case number, in the format of x[.y].z.",
+                    "type": "string",
+                    "maxLength": 32,
+                    "pattern": "^([0-9]+)([.][0-9]+)*$"
+                },
+                "name": {
+                    "description": "The name of the test case or group of tests.",
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "description": {
+                    "description": "A description of the test case or group, stating the purpose or scope.",
+                    "type": "string",
+                    "maxLength": 1023
+                },
+                "result": {
+                    "description": "Result or outcome of the test case.  PASS indicates all required metrics also indicate PASS.  FAIL indicates one or more required metrics indicate FAIL.  SKIP indicates the test case was not executed.  WARN indicates behavior observed during the execution of the test case might cause concern, problems, or issues not directly relating to the required test metrics.",
+                    "$ref": "#/$defs/resultType"
+                },
+                "status": {
+                    "description": "Status of the test case.",
+                    "$ref": "#/$defs/testStatus"
+                },
+                "artifacts": {
+                    "description": "Paths, relative to the root of the archive, to files relating to this specific test case.",
+                    "$ref": "#/$defs/artifacts"
+                },
+                "links": {
+                    "description": "Links to additional, external documentation specific to the test.",
+                    "$ref": "#/$defs/decoratedLinks"
+                },
+                "measurements": {
+                    "description": "Test measurements recorded during the test procedure.  Measurements are in addition to values recorded or required as part a test metric.",
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "description": "Name of the measurement.",
+                                "type": "string",
+                                "maxLength": 255
+                            },
+                            "description": {
+                                "description": "Description of the measurement values.",
+                                "type": "string",
+                                "maxLength": 1023
+                            },
+                            "values": {
+                                "description": "Actual measurement value(s).  Must be an arary, of at least 1 value.  All values must be in the same units.",
+                                "type": "array",
+                                "minItems": 1
+                            },
+                            "units": {
+                                "description": "Units of the measurement value(s).",
+                                "$ref": "#/$defs/units"
+                            },
+                            "references": {
+                                "description": "Link(s) to defintiion of counter or measurement parameter within O-RAN ALLIANCE, 3GPP, or other specification(s).",
+                                "$ref": "#/$defs/decoratedLinks"
+                            }
+                        },
+                        "required": [ "name", "values", "units" ],
+                        "additionalProperties": false
+                    },
+                    "minItems": 1,
+                    "additionalItems": false
+                },
+                "metrics": {
+                    "description": "Test metrics or requirements for the test case. (Mandatory for test case)",
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "description": {
+                                "description": "Text of the test metric or test requirement, per the test specification.",
+                                "type": "string",
+                                "maxLength": 1023
+                            },
+                            "measurements": {
+                                "description": "One or more measurements required to determine the outcome of the metric or requirement.",
+                                "$ref": "#/$defs/testCase/properties/measurements"
+                            },
+                            "status": {
+                                "description": "Status of the test metric.",
+                                "$ref": "#/$defs/testStatus"
+                            },
+                            "result": {
+                                "description": "Result or outcome of the test metric or requirement.  PASS indicates the requirement of the metric is met.  FAIL indicates the requirement was of the metric was not met.  SKIP indicates the requirement was not evaluated.  WARN value should not be used for metrics.",
+                                "$ref": "#/$defs/resultType"
+                            }
+                        },
+                        "required": [ "description", "measurements", "status", "result"],
+                        "additionalProperties": false
+                    },
+                    "minItems": 1,
+                    "additionalItems": false
+                },
+                "notes": {
+                    "description": "A list of notes about the test.",
+                    "$ref": "#/$defs/testNotes"
+                },
+                "startDate": {
+                    "description": "Date and time the test case was started.",
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "stopDate": {
+                    "description": "Date and time the test case was completed.",
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "contacts": {
+                    "description": "",
+                    "$ref": "#/$defs/contacts"
+                }
+            },
+            "required": [ 
+                "number",
+                "name",
+                "description",
+                "result",
+                "status",
+                "metrics"
+            ],
+            "additionalProperties": false
+        },
+        "testNotes": {
+            "description": "A list of notes about the parent object.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "description": "Title of the notecard.",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "body": {
+                        "description": "Content of the notecard.",
+                        "type": "string",
+                        "maxLength": 4095
+                    }
+                },
+                "required": [ "title", "body" ],
+                "additionalProperties": false
+            },
+            "contains": {
+                "type": "object"
+            },
+            "minContains": 1
+        },
+        "wg4IotProfile": {
+            "description": "Values used within the IOT profile parameters, as defined by O-RAN ALLIANCE WG4. Copyright 2025 O-RAN ALLIANCE e.V. Licensed under the Standards Collaboration, Copyright License Version 1.0 (the 'License'); You may not use this file except in compliance with the License. You may obtain a copy of the License at https://www.o-ran.org/sccl",
+            "type": "object",
+            "properties": {
+                "wg4IotSpecificationVersion": {
+                    "description": "Version of the O-RAN ALLIANCE WG4.IOT.0 specification containing the profile values.",
+                    "type": "string",
+                    "pattern": "^[0-9][0-9][.][0-9][0-9]$"
+                },
+                "mPlaneIotProfileName": {
+                    "description": "Name of the M-Plane IOT Profile, as defined within Annex A of the O-RAN ALLIANCE WG4.IOT.0 specification.",
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 128
+                },
+                "mPlaneIotProfileTestConfiguration": {
+                    "description": "Name of the specific test configuration for the M-Plane IOT profile.",
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 128
+                },
+                "cusPlaneIotProfileName": {
+                    "description": "Name of the CUS-Plane IOT Profile, as defined within Annex A of the O-RAN ALLIANCE WG4.IOT.0 specification.",
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 128
+                },
+                "cusPlaneIotProfileTestConfiguration": {
+                    "description": "Name of the specific test configuration for the M-Plane IOT profile.",
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 128
+                }
+            },
+            "additionalProperties": false,
+            "allOf": [
+                {"required": ["wg4IotSpecificationVersion"]},
+                {
+                    "anyOf": [
+                        {"required": ["mPlaneIotProfileName"]},
+                        {"required": ["cusPlaneIotProfileName"]}
+                    ]
+                }
+            ]
+        },
+        "configurationParameters": {
+            "description": "Various configuration parameters that may be applied during testing. Copyright 2025 O-RAN ALLIANCE e.V. Licensed under the Standards Collaboration, Copyright License Version 1.0 (the 'License'); You may not use this file except in compliance with the License. You may obtain a copy of the License at https://www.o-ran.org/sccl",
+            "type": "object",
+            "properties": {
+                "deploymentArchitecture": {
+                    "enum": ["indoor", "outdoor"]
+                },
+                "deploymentScale": {
+                    "enum": ["micro", "pico", "macro"]
+                },
+                "deploymentRfScenario": {
+                    "enum": ["rural", "urban", "dense.urban", "LOS", "NLOS", "nLOS"]
+                },
+                "frequencyRange5G":{
+                    "type": "array",
+                    "items": {
+                        "enum": ["fr1", "fr2-1", "fr2-2", "fr2-ntn"]
+                    },
+                    "minItems": 1
+                },
+                "band5G": {
+                    "type": "array",
+                    "items": {
+                        "enum": ["n1", "n2", "n3", "n5", "n7", "n8", "n12", "n13", "n14", "n18", "n20", "n24", "n25", "n26", "n28", "n29", "n30", "n31", "n34", "n38", "n39", "n40", "n41", "n46", "n48", "n50", "n51", "n53", "n54", "n65", "n66", "n70", "n71", "n72", "n74", "n75", "n76", "n77", "n78", "n79", "n80", "n81", "n82", "n83", "n84", "n85", "n86", "n89", "n90", "n91", "n92", "n93", "n94", "n95", "n96", "n97", "n98", "n99", "n100", "n101", "n102", "n103", "n104", "n105", "n106", "n109", "n254", "n255", "n256", "n257", "n258", "n259", "n260", "n261", "n262", "n263", "n510", "n511", "n512"]
+                    },
+                    "minItems": 1
+                },
+                "bandLTE": {
+                    "type": "array",
+                    "items": {
+                        "enum": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "85", "87", "88", "103", "106", "107", "108"]
+                    },
+                    "minItems": 1
+                },
+                "nr-arfcn": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "e-arfcn": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "subCarrierSpacing": {
+                    "enum": ["15kHz", "30kHz", "60kHz"]
+                },
+                "totalTransmissionBandwidth": {
+                    "type": "number",
+                    "minimum": 0
+                },
+                "totalResourceBlocks": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "carrierPrefixLength": {
+                    "type": "integer"
+                },
+                "slotLength": {
+                    "type": "integer"
+                },
+                "duplexMode": {
+                    "enum": ["tdd", "fdd"]
+                },
+                "tddDlUlRatio": {
+                    "type": "number"
+                },
+                "ipv4":{
+                    "type": "boolean"
+                },
+                "ipv6": {
+                    "type": "boolean"
+                },
+                "numMimoLayers": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "numTxAntenna": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "numRxAntenna": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "totalAntennaGain": {
+                    "type": "number"
+                },
+                "totalTransmitPowerIntoAntenna": {
+                    "type": "number"
+                }
+            },
+            "additionalProperties": true,
+            "required": [],
+            "minProperties": 1
+        }
+    },
+    "properties": {
+        "$schema": {
+            "description": "Allow the ojbect to provide a refernece to the schema.",
+            "type": "string"
+        },
+        "schemaVersion": {
+            "description": "Version of the schema file that is applied to these results.",
+            "const": 1
+        },
+        "testMetadata": {
+            "type": "object",
+            "properties": {
+                "contacts":{
+                    "description": "Contacts relating to the testing, but not necessarily directly relating to the lab or a testbed component.",
+                    "$ref": "#/$defs/contacts"
+                },
+                "startDate":{
+                    "description": "Date and time the test was started.",
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "stopDate": {
+                    "description": "Date and time the test was completed.",
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "dutName": {
+                    "description": "Name or reference to the device(s) in the list of testbed components that is considered the device(s) under test (DUT) or system under test (SUT).",
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "interfaceUnderTest": {
+                    "description": "Interface(s) that was under test within these test results.",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/$defs/interfaceUnderTest"
+                    }
+                },
+                "result": {
+                    "description": "The overall, aggregated, test result. PASS indicates all required test cases also indicate PASS. FAIL indicates one or more required test cases indicate FAIL. WARN indicates behavior observed during the execution of the test case might cause concern, problems, or issues not directly relating to the required test metrics. SKIP should not be used.",
+                    "$ref": "#/$defs/resultType"
+                },
+                "testType": {
+                    "description": "Type of test result within this artifact.",
+                    "$ref": "#/$defs/testType"
+                },
+                "testId": {
+                    "description": "Certificate/Badge Reference ID, assigned by the laboratory, in the format of [O-RAN Designator]yy####, where yy is the two digit year, and #### is a four digit number defined by the laboratory.",
+                    "type": "string",
+                    "oneOf": [
+                        {
+                            "pattern": "^[A-Za-z0-9]{3,4}([23][0-9]){1}[0-9]{4}$",
+                            "minLength": 9,
+                            "maxLength": 10
+                        },
+                        {
+                            "format": "uuid"
+                        }
+                    ]
+                },
+                "iotProfile": {
+                    "description": "Information about the WG4 IOT profile utilized within the test.",
+                    "$ref": "#/$defs/wg4IotProfile"
+                },
+                "configurationParameters": {
+                    "description": "General configuration parameters applied to all components in the testbed during the testing.",
+                    "$ref": "#/$defs/configurationParameters"
+                }
+            },
+            "required": [ "startDate", "dutName", "result", "testType", "testId" ],
+            "additionalProperties": false
+        },
+        "tags": {
+            "type": "array",
+            "description": "Tags that help describe this tests. These may be used to filter tests.",
+            "items": {
+                "type": "string",
+                "pattern": "^[a-z0-9-]+$",
+                "maxLength": 255
+            },
+            "contains": {
+                "type": "string"
+            },
+            "minContains": 1
+        },
+        "testbedComponents": {
+            "type": "array",
+            "description": "Array of DUT/SUT components, including test and measurement equipment.",
+            "items" : {
+                "type": "object",
+                "properties": {
+                    "componentDescription": {
+                        "description": "Description of the component role with the testing (i.e. O-DU, O-RU, RIC, UE, etc.).",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "manufacturerName": {
+                        "description": "Company producing the product (hardware or software)",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "manufacturerModel": {
+                        "description": "Product modle number or other unique identifier.",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "serialNumber": {
+                        "description": "Product serial number.",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "testbedInventoryId": {
+                        "description": "Opaque ID number used by lab for invetory management.",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "softwareVersion": {
+                        "description": "Software version that was installed during the testing.",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "hardwareVersion": {
+                        "description": "Hardware version that was used during the testing.",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "firmwareVersion": {
+                        "description": "Firmware version that was installed during the testing.",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "contacts":{
+                        "description": "Company contacts for this product.",
+                        "$ref": "#/$defs/contacts"
+                    },
+                    "configurationArtifacts": {
+                        "description": "Paths, relative to the root of the archive, to configuration files or data relating to this specific testbed component.",
+                        "$ref": "#/$defs/artifacts"
+                    },
+                    "configurationNotes": {
+                        "description": "Notes pertaining to the configuration of this testbed component.",
+                        "$ref": "#/$defs/testNotes"
+                    },
+                    "configurationParameters": {
+                        "description": "Configuration parameters specific to this testbed component.",
+                        "$ref": "#/$defs/configurationParameters"
+                    }
+                },
+                "allOf": [
+                    {"required": ["componentDescription", "manufacturerName", "manufacturerModel"]},
+                    {
+                        "anyOf": [
+                            {"required": ["softwareVersion"]},
+                            {"required": ["hardwareVersion"]},
+                            {"required": ["firmwareVersion"]}
+                        ]
+                    }
+                ],
+                "additionalProperties": false
+            },
+            "contains": {
+                "type": "object"
+            },
+            "minContains": 1
+        },
+        "testLab": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Name of the test lab.",
+                    "type": "string",
+                    "maxLength": 255
+                }, 
+                "address": {
+                    "description": "Address of the test lab.",
+                    "type": "string",
+                    "maxLength": 512
+                },
+                "contacts": {
+                    "description": "Contact information for the lab.",
+                    "$ref": "#/$defs/contacts"
+                },
+                "links": {
+                    "description": "Links to additional information provided by the lab.",
+                    "$ref": "#/$defs/decoratedLinks"
+                }
+            },
+            "required": [ "name", "address", "contacts" ], 
+            "additionalProperties": false
+        },
+        "testSpecifications": {
+            "description": "Array of version controlled documents required for the testing, that can include test specifications, process documentation, and profile documentation.",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "description": "Name of the test specification.",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "version": {
+                        "description": "Version of the test specification.",
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "description": {
+                        "description": "Description of the test specification.",
+                        "type": "string",
+                        "maxLength": 512
+                    },
+                    "links": {
+                        "description": "Link to the test specification.",
+                        "$ref": "#/$defs/decoratedLinks"
+                    }
+                },
+                "required": ["name", "version", "links"],
+                "additionalProperties": false
+            },
+            "contains": {
+                "type": "object"
+            },
+            "minContains": 1
+        },
+        "testResults": {
+            "description": "Array of groups of test cases.  Groups can be nested to represent the hierarchy defined by the test specification.",
+            "type": "array",
+            "items": {
+                "oneOf": [
+                    {"$ref": "#/$defs/testGroup"},
+                    {"$ref": "#/$defs/testCase"}
+                ]
+            },
+            "contains": {
+                "type": "object"
+            },
+            "minContains": 1
+        },
+        "notes": {
+            "description": "A list of notes about the test.",
+            "$ref": "#/$defs/testNotes"
+        }
+    },
+    "required": [ 
+        "schemaVersion",
+        "testMetadata",
+        "testbedComponents",
+        "testLab",
+        "testSpecifications",
+        "testResults"
+    ],
+    "additionalProperties": false
+}

@@ -1,0 +1,79 @@
+# Copyright 2025 highstreet technologies USA Corp.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+x-common_env: &common_env
+    SDNR_RESTCONF_URL: ${SDNR_RESTCONF_URL}
+    SDNR_USERNAME: ${ADMIN_USERNAME}
+    SDNR_PASSWORD: ${ADMIN_PASSWORD}    
+
+x-du_env: &du_env
+    NETCONF_USERNAME: ${NETCONF_USERNAME}
+    NETCONF_PASSWORD: ${NETCONF_PASSWORD}
+
+    VES_URL: ${VES_URL}
+    VES_USERNAME: ${VES_ENDPOINT_USERNAME}
+    VES_PASSWORD: ${VES_ENDPOINT_PASSWORD}
+
+x-nf: &common_nf
+    privileged: true
+    stop_grace_period: 5m
+    extra_hosts:
+      - "controller.dcn.${HTTP_DOMAIN}:${HOST_IP}"
+      - "ves-collector.dcn.${HTTP_DOMAIN}:${HOST_IP}"
+    networks:
+      dcn:
+#      dhcp:
+
+services:
+  pynts-o-du-o1:
+    <<: *common_nf
+    image: ${LOCAL_DOCKER_REPO}pynts-o-du-o1:${PYNTS_VERSION}
+    container_name: pynts-o-du-o1
+    hostname: pynts-o-du-o1
+    environment:
+        <<: [*common_env, *du_env]
+        O_DU_CALLHOME_PORT: 4335
+    volumes:
+      - ./o-du-o1/data:/data
+
+
+  pynts-o-ru-hybrid:
+    <<: *common_nf
+    image: ${LOCAL_DOCKER_REPO}pynts-o-ru-mplane:${PYNTS_VERSION}
+    container_name: pynts-o-ru-hybrid
+    hostname: pynts-o-ru-hybrid
+    environment:
+        <<: [*common_env]
+    volumes:
+      - ./o-ru-mplane/data:/data
+      - ./o-ru-mplane/data/ietf-netconf-server-running-hybrid.json:/data/ietf-netconf-server-running.json
+
+  pynts-o-ru-hierarchical:
+    <<: *common_nf
+    image: ${LOCAL_DOCKER_REPO}pynts-o-ru-mplane:${PYNTS_VERSION}
+    container_name: pynts-o-ru-hierarchical
+    hostname: pynts-o-ru-hierarchical
+    environment:
+        <<: [*common_env]
+    volumes:
+      - ./o-ru-mplane/data:/data
+      - ./o-ru-mplane/data/ietf-netconf-server-running-hierarchical.json:/data/ietf-netconf-server-running.json  
+
+networks:
+  dcn:
+    external: true
+#  dhcp:
+#    external: true
+
+

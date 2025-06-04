@@ -1,0 +1,22 @@
+{
+  "dutName": "openru-controller-v1",
+  "testType": "conformance",
+  "interfaceUnderTest": ["o-ru.fhm"],
+  "contacts": [
+    {
+      "firstName": "Alice",
+      "lastName": "Tester",
+      "email": "alice@example.org",
+      "organization": "ExampleOrg",
+      "phone": "+123456789"
+    }
+  ],
+  "configurationParameters": {
+    "ipv4": true,
+    "ipv6": false,
+    "duplexMode": "tdd",
+    "deploymentArchitecture": "indoor",
+    "deploymentScale": "micro",
+    "deploymentRfScenario": "urban"
+  }
+}

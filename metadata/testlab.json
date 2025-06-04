@@ -1,0 +1,20 @@
+{
+  "name": "Example Hybrid Test Lab",
+  "address": "1234 Lab Street, City, Country",
+  "contacts": [
+    {
+      "firstName": "Bob",
+      "lastName": "Labtech",
+      "email": "bob.labtech@example.org",
+      "organization": "ExampleLab",
+      "phone": "+987654321"
+    }
+  ],
+  "links": [
+    {
+      "displayName": "Lab Website",
+      "url": "https://example.org/lab",
+      "description": "Homepage for the test lab"
+    }
+  ]
+}
