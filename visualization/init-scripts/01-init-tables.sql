@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS measurements (
     name TEXT NOT NULL,
     value JSONB NOT NULL,
     units TEXT NOT NULL,
+    dut_name TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     PRIMARY KEY (id, created_at)
 );
@@ -122,6 +123,7 @@ SELECT
     meas.name AS measurement_name,
     meas.value AS measurement_value,
     meas.units AS measurement_units,
+    meas.dut_name AS measurement_dut_name,
     meas.created_at
 FROM test_runs tr
 JOIN test_cases tc ON tr.id = tc.test_run_id

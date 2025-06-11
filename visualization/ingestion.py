@@ -465,16 +465,29 @@ def process_artifact(cursor, test_run_id, test_case_id, artifact, temp_dir, zip_
 
 def process_measurement(cursor, metric_id, test_case_id, measurement):
     """Process a measurement."""
+    # Get the dut_name from the test_runs table
+    if test_case_id:
+        cursor.execute("""
+            SELECT tr.dut_name FROM test_runs tr
+            JOIN test_cases tc ON tr.id = tc.test_run_id
+            WHERE tc.id = %s
+        """, (test_case_id,))
+        result = cursor.fetchone()
+        dut_name = result[0] if result else None
+    else:
+        dut_name = None
+
     # Insert measurement
     cursor.execute("""
-        INSERT INTO measurements (metric_id, test_case_id, name, value, units)
-        VALUES (%s, %s, %s, %s, %s);
+        INSERT INTO measurements (metric_id, test_case_id, name, value, units, dut_name)
+        VALUES (%s, %s, %s, %s, %s, %s);
     """, (
         metric_id,
         test_case_id,
         measurement.get('name', ''),
         json.dumps(measurement.get('values', [])),
-        measurement.get('units', '')
+        measurement.get('units', ''),
+        dut_name
     ))
 
 
