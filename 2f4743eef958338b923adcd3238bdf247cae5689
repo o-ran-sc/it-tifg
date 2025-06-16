@@ -1,0 +1,8 @@
+Verified+1: ORAN Required GHA <releng+oran.required.gha@linuxfoundation.org>
+Verified+1: Alex Stancu <alexandru.stancu@highstreet-technologies.com>
+Code-Review+2: Alex Stancu <alexandru.stancu@highstreet-technologies.com>
+Submitted-by: Alex Stancu <alexandru.stancu@highstreet-technologies.com>
+Submitted-at: Mon, 16 Jun 2025 16:57:40 +0000
+Reviewed-on: https://gerrit.o-ran-sc.org/r/c/it/tifg/+/14567
+Project: it/tifg
+Branch: refs/heads/master
