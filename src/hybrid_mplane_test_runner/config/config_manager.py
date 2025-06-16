@@ -63,6 +63,9 @@ class TestCaseConfig(BaseModel):
     tc_002_config_path: str = Field(default="network-topology:network-topology/topology=topology-netconf", 
                                    description="Path for configuration-only data retrieval in TC-002")
 
+    # TC-003 configuration
+    tc_003_mountpoint_name: str = Field(default="pynts-o-ru-hybrid", description="Mountpoint name for TC-003")
+
 
 class ControllerConfig(BaseModel):
     """Configuration for controllers."""
