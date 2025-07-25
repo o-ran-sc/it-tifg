@@ -102,6 +102,7 @@ class AppConfig(BaseModel):
     simulator: SimulatorConfig = Field(default_factory=SimulatorConfig, description="Simulator configuration")
     log_level: str = Field(default="INFO", description="Logging level")
     test_execution: Optional[TestExecutionConfig] = Field(default=None, description="Test execution configuration")
+    skip_archiving: bool = Field(default=False, description="If True, results will not be archived in a zip file but saved directly")
 
 
 class ConfigManager:

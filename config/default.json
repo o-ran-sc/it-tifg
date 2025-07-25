@@ -38,8 +38,9 @@
   "log_level": "INFO",
   "test_execution": {
     "comment": "Uncomment one of the following options to control which tests are executed",
-    "test_cases": ["002", "003"],
+    "test_cases": ["002", "003", "004"],
     "_categories": ["basic", "connectivity"],
     "_suites": ["Default"]
-  }
+  },
+  "skip_archiving": true
 }

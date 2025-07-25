@@ -599,30 +599,41 @@ def main() -> None:
             "Log collected from inside the simulator container"
         )
 
-    # Export the archive
-    archive_path = os.path.join(os.path.dirname(test_object.paths["output_path"]), f"results_{test_object.test_id}_{test_object.timestamp}.zip")
-    archive_builder.export_archive(Path(archive_path))
+    # Check if we should skip archiving
+    if config.skip_archiving:
+        # Save results directly without archiving
+        results_path = os.path.join(os.path.dirname(test_object.paths["output_path"]), f"results_{test_object.test_id}_{test_object.timestamp}.json")
+        with open(results_path, "w") as f:
+            f.write(test_object.testResultsSummary.model_dump_json(exclude_none=True, by_alias=True))
 
-    # Remove the individual files after archiving
-    try:
-        os.remove(test_object.paths["log_path"])
-        os.remove(test_object.paths["restconf_log_path"])
-        if simulator:
-            os.remove(test_object.paths["sim_log_path"])
-        # We don't need to create the separate results*.json file
-        # The results.json is already included in the archive
-    except Exception as e:
-        handle_error(
-            e,
-            HybridMPlaneError,
-            "Failed to remove individual log files",
-            context={"error_details": str(e)},
-            log_level=logging.WARNING,
-            reraise=False
-        )
+        print(f"Tests finished with an overall status of {result_status}")
+        print(f"Results saved to: {results_path}")
+        print(f"Artifacts saved to: {os.path.dirname(test_object.paths['output_path'])}")
+    else:
+        # Export the archive
+        archive_path = os.path.join(os.path.dirname(test_object.paths["output_path"]), f"results_{test_object.test_id}_{test_object.timestamp}.zip")
+        archive_builder.export_archive(Path(archive_path))
 
-    print(f"Tests finished with an overall status of {result_status}")
-    print(f"Results and artifacts archived to: {archive_path}")
+        # Remove the individual files after archiving
+        try:
+            os.remove(test_object.paths["log_path"])
+            os.remove(test_object.paths["restconf_log_path"])
+            if simulator:
+                os.remove(test_object.paths["sim_log_path"])
+            # We don't need to create the separate results*.json file
+            # The results.json is already included in the archive
+        except Exception as e:
+            handle_error(
+                e,
+                HybridMPlaneError,
+                "Failed to remove individual log files",
+                context={"error_details": str(e)},
+                log_level=logging.WARNING,
+                reraise=False
+            )
+
+        print(f"Tests finished with an overall status of {result_status}")
+        print(f"Results and artifacts archived to: {archive_path}")
 
 
 if __name__ == "__main__":

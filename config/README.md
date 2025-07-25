@@ -85,6 +85,16 @@ Configuration for logging:
 "log_level": "INFO"
 ```
 
+### Results Archiving
+
+Configuration for results archiving:
+
+```json
+"skip_archiving": false
+```
+
+When set to `true`, test results will not be archived in a zip file but saved directly to the output directory. This can be useful for debugging or when you want to access the individual result files directly.
+
 ## Using Custom Configuration
 
 You can specify a custom configuration file when running the test runner:
