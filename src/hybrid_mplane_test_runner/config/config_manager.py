@@ -52,19 +52,15 @@ class TestMetadataConfig(BaseModel):
 class TestCaseConfig(BaseModel):
     """Configuration for test cases."""
 
-    tc_001_expected_name: str = Field(default="pynts-o-ru-hybrid", description="Expected node name for TC-001")
+    dut_mountpoint_name: str = Field(default="pynts-o-ru-hybrid", description="Unified mountpoint name used for all test cases")
     tc_001_expected_status: str = Field(default="connected", description="Expected status for TC-001")
     tc_001_expected_capability: str = Field(default="o-ran-uplane-conf", description="Expected capability for TC-001")
 
     # TC-002 configuration
-    tc_002_mountpoint_name: str = Field(default="pynts-o-ru-hybrid", description="Mountpoint name for TC-002")
     tc_002_filter_path: str = Field(default="network-topology:network-topology/topology=topology-netconf", 
                                    description="Path for subtree-filtered data retrieval in TC-002")
     tc_002_config_path: str = Field(default="network-topology:network-topology/topology=topology-netconf", 
                                    description="Path for configuration-only data retrieval in TC-002")
-
-    # TC-003 configuration
-    tc_003_mountpoint_name: str = Field(default="pynts-o-ru-hybrid", description="Mountpoint name for TC-003")
 
 
 class ControllerConfig(BaseModel):

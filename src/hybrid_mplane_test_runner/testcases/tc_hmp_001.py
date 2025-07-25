@@ -63,7 +63,7 @@ class TestCase_001(HybridMPlaneTestCase):
     def run(self) -> models.TestCase:
         # Get expected values from configuration
         config = get_config().get_config()
-        expected_name = config.test_cases.tc_001_expected_name
+        expected_name = config.test_cases.dut_mountpoint_name
         expected_status = config.test_cases.tc_001_expected_status
         expected_capabily = config.test_cases.tc_001_expected_capability
         logging.info(f"Started running test case {self.number} ({self.name})")

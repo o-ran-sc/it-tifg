@@ -106,7 +106,7 @@ class TestCase_003(HybridMPlaneTestCase):
         """
         # Get the mountpoint name from configuration
         config = get_config().get_config()
-        mountpoint_name = getattr(config.test_cases, "tc_003_mountpoint_name", "pynts-o-ru-hybrid")
+        mountpoint_name = config.test_cases.dut_mountpoint_name
 
         # Construct the URL for NETCONF sessions retrieval
         url = f"{self.controller.base_url}/rests/data/network-topology:network-topology/topology=topology-netconf/node={mountpoint_name}/yang-ext:mount/ietf-netconf-monitoring:netconf-state/sessions?content=nonconfig"
@@ -226,7 +226,7 @@ class TestCase_003(HybridMPlaneTestCase):
                 username = session.get("username", "N/A")
                 source_host = session.get("source-host", "N/A")
                 transport = session.get("transport", "N/A")
-                
+
                 measurements.append(
                     models.Measurement(
                         name=f"Session {i+1} Details",

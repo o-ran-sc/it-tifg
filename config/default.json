@@ -16,13 +16,11 @@
     "contact_phone": "+123456789"
   },
   "test_cases": {
-    "tc_001_expected_name": "pynts-o-ru-hybrid",
+    "dut_mountpoint_name": "pynts-o-ru-hybrid",
     "tc_001_expected_status": "connected",
     "tc_001_expected_capability": "o-ran-uplane-conf",
-    "tc_002_mountpoint_name": "pynts-o-ru-hybrid",
     "tc_002_filter_path": "ietf-hardware:hardware",
-    "tc_002_config_path": "ietf-hardware:hardware",
-    "tc_003_mountpoint_name": "pynts-o-ru-hybrid"
+    "tc_002_config_path": "ietf-hardware:hardware"
   },
   "controller": {
     "odl_url": "https://odlux.oam.smo.o-ran-sc.org",
