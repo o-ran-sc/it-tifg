@@ -123,7 +123,7 @@ class TestCase_002(HybridMPlaneTestCase):
         """
         # Get the mountpoint name from configuration
         config = get_config().get_config()
-        mountpoint_name = config.test_cases.tc_002_mountpoint_name
+        mountpoint_name = getattr(config.test_cases, "dut_mountpoint_name", config.test_cases.tc_002_mountpoint_name)
 
         # Construct the URL for unfiltered data retrieval
         url = f"{self.controller.base_url}/rests/data/network-topology:network-topology/topology=topology-netconf/node={mountpoint_name}/yang-ext:mount/"
@@ -177,7 +177,7 @@ class TestCase_002(HybridMPlaneTestCase):
         # Get the filter path and mountpoint name from configuration
         config = get_config().get_config()
         filter_path = getattr(config.test_cases, "tc_002_filter_path", "network-topology:network-topology/topology=topology-netconf")
-        mountpoint_name = config.test_cases.tc_002_mountpoint_name
+        mountpoint_name = getattr(config.test_cases, "dut_mountpoint_name", config.test_cases.tc_002_mountpoint_name)
 
         # Construct the URL for filtered data retrieval
         url = f"{self.controller.base_url}/rests/data/network-topology:network-topology/topology=topology-netconf/node={mountpoint_name}/yang-ext:mount/{filter_path}"
@@ -226,7 +226,7 @@ class TestCase_002(HybridMPlaneTestCase):
         # Get the config-only path and mountpoint name from configuration
         config = get_config().get_config()
         config_path = getattr(config.test_cases, "tc_002_config_path", "network-topology:network-topology/topology=topology-netconf")
-        mountpoint_name = config.test_cases.tc_002_mountpoint_name
+        mountpoint_name = getattr(config.test_cases, "dut_mountpoint_name", config.test_cases.tc_002_mountpoint_name)
 
         # Construct the URL for config-only data retrieval
         url = f"{self.controller.base_url}/rests/data/network-topology:network-topology/topology=topology-netconf/node={mountpoint_name}/yang-ext:mount/{config_path}?content=config"

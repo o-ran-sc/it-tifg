@@ -38,10 +38,12 @@ docs/
 
 ## Configuration Parameters
 
-The following configuration parameters are required for specific test cases:
+The following configuration parameters are required for test cases:
 
-| Test Case ID | Parameter Name | Description | Default Value |
-|--------------|----------------|-------------|---------------|
-| TC-HMP-002 | tc_002_mountpoint_name | The mountpoint name used for RESTCONF requests | Depends on implementation |
-| TC-HMP-003 | tc_003_mountpoint_name | The mountpoint name used for RESTCONF requests | pynts-o-ru-hybrid |
-| TC-HMP-004 | tc_004_mountpoint_name | The mountpoint name used for RESTCONF requests to configure user-plane parameters | pynts-o-ru-hybrid |
+| Parameter Name | Description | Used By | Default Value |
+|----------------|-------------|---------|---------------|
+| dut_mountpoint_name | The unified mountpoint name used for all RESTCONF requests | All test cases | pynts-o-ru-hybrid |
+| tc_001_expected_status | The expected status of the NETCONF connection | TC-HMP-001 | connected |
+| tc_001_expected_capability | The expected capability of the NETCONF connection | TC-HMP-001 | o-ran-uplane-conf |
+| tc_002_filter_path | The filter path used for RESTCONF requests | TC-HMP-002 | ietf-hardware:hardware |
+| tc_002_config_path | The config path used for RESTCONF requests | TC-HMP-002 | ietf-hardware:hardware |

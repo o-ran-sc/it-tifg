@@ -140,7 +140,7 @@ class TestCase_004(HybridMPlaneTestCase):
         """
         # Get configuration values from config
         config = get_config().get_config()
-        mountpoint_name = getattr(config.test_cases, "tc_004_mountpoint_name", "pynts-o-ru-hybrid")
+        mountpoint_name = getattr(config.test_cases, "dut_mountpoint_name", getattr(config.test_cases, "tc_004_mountpoint_name", "pynts-o-ru-hybrid"))
 
         # Construct a valid payload for operational-info
         # This is a simplified example - in a real implementation, this would be more complex
@@ -210,7 +210,7 @@ class TestCase_004(HybridMPlaneTestCase):
         """
         # Get configuration values from config
         config = get_config().get_config()
-        mountpoint_name = getattr(config.test_cases, "tc_004_mountpoint_name", "pynts-o-ru-hybrid")
+        mountpoint_name = getattr(config.test_cases, "dut_mountpoint_name", getattr(config.test_cases, "tc_004_mountpoint_name", "pynts-o-ru-hybrid"))
 
         # Construct the URL for retrieving the configuration
         url = f"{self.controller.base_url}/rests/data/network-topology:network-topology/topology=topology-netconf/node={mountpoint_name}/yang-ext:mount/o-ran-operations:operational-info"
