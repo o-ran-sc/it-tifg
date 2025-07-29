@@ -404,7 +404,12 @@ def main() -> None:
     test_object = HybridMPlaneTests()
 
     # Initialize controller with configuration
-    odl_controller = OpenDaylightController()
+    odl_controller = OpenDaylightController(
+        base_url=config.controller.odl_url,
+        username=config.controller.odl_username,
+        password=config.controller.odl_password,
+        timeout=config.controller.timeout
+    )
 
     # Initialize simulator if configured
     simulator = MPInterfaceSimulator() if config.simulator.use_simulator else None
