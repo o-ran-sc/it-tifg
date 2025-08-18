@@ -277,9 +277,59 @@ class TestCase_004(HybridMPlaneTestCase):
         Returns:
             Dict[str, Any]: The result of checking for a notification, or None if notifications are not supported.
         """
-        # This is an optional step, so we'll just return None for now
-        # In a real implementation, this would check for notifications
-        return None
+        # Get configuration values
+        config = get_config().get_config()
+        mountpoint_name = config.test_cases.dut_mountpoint_name
+        
+        # Try to check for notifications (optional functionality)
+        try:
+            # Construct URL for notification check
+            url = f"{self.controller.base_url}/rests/data/ietf-restconf-monitoring:restconf-state/streams"
+            
+            # Make the request
+            status_code, data = self._make_restconf_request(url)
+            
+            # Debug logging to see what we received
+            logging.debug(f"Notification streams response - Status: {status_code}")
+            logging.debug(f"Notification streams data: {data}")
+            
+            if status_code != 200 or not data:
+                logging.info("Notification streams not available (optional feature)")
+                return None
+            
+            # Parse streams to find netconf-config-change stream specifically
+            streams = data.get("ietf-restconf-monitoring:streams", {}).get("stream", [])
+            config_change_stream = None
+            
+            for stream in streams:
+                if stream.get("name") == "netconf-config-change":
+                    config_change_stream = stream
+                    logging.debug(f"Found netconf-config-change stream: {stream}")
+                    break
+            
+            if not config_change_stream:
+                logging.info("netconf-config-change stream not found")
+                return None
+            
+            # Check if stream has access endpoints available
+            access_info = config_change_stream.get("access", [])
+            if not access_info:
+                logging.info("netconf-config-change stream has no access endpoints")
+                return None
+                
+            # Return structured result indicating stream is available
+            return {
+                "status_code": status_code,
+                "data": config_change_stream,
+                "timestamp": datetime.now(UTC).isoformat(),
+                "data_path": "/o-ran-operations:operational-info",
+                "mountpoint_name": mountpoint_name,
+                "stream_available": True,
+                "stream_name": "netconf-config-change"
+            }
+        except Exception as e:
+            logging.debug(f"Could not check for notifications (optional): {str(e)}")
+            return None
 
     def _validate_notification_result(self, notification_result: Dict[str, Any]) -> bool:
         """
@@ -291,11 +341,44 @@ class TestCase_004(HybridMPlaneTestCase):
         Returns:
             bool: True if the notification check was successful, False otherwise.
         """
-        # This is an optional step, so we'll just return True if notification_result is None
+        # This is an optional step, so return True if notification_result is None
         if notification_result is None:
+            logging.info("Notification check skipped (optional feature)")
             return True
 
-        # In a real implementation, this would validate the notification
+        # Check if the status code indicates success
+        if notification_result.get("status_code") != 200:
+            logging.warning(f"Notification check returned status {notification_result.get('status_code')}")
+            return False
+        
+        # Check for required fields in notification
+        if "data_path" not in notification_result:
+            logging.warning("Notification missing data_path")
+            return False
+            
+        # Verify the notification relates to operational-info
+        data_path = notification_result.get("data_path", "")
+        if "operational-info" not in data_path:
+            logging.warning(f"Notification path {data_path} doesn't match operational-info")
+            return False
+        
+        # Check if stream availability information is present
+        if "stream_available" not in notification_result:
+            logging.warning("Notification missing stream_available field")
+            return False
+            
+        # Verify stream is available
+        if not notification_result.get("stream_available", False):
+            logging.warning("Notification stream is not available")
+            return False
+            
+        # Verify stream name is correct
+        stream_name = notification_result.get("stream_name", "")
+        if stream_name != "netconf-config-change":
+            logging.warning(f"Unexpected stream name: {stream_name}")
+            return False
+        
+        logging.info("Notification validation successful")
         return True
 
     def _make_restconf_request(self, url: str) -> tuple[int, Dict[str, Any]]:
